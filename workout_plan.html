@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Workout Plan</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0e0f;
+    --surface: #181819;
+    --surface2: #202022;
+    --border: #2a2a2d;
+    --accent: #f5a623;
+    --accent2: #e05c2e;
+    --green: #3ecf8e;
+    --blue: #4f9cf9;
+    --red: #f25c5c;
+    --text: #f0eeea;
+    --muted: #888;
+    --chunk-a: #2a1f0f;
+    --chunk-b: #0f1e2a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #111112 0%, #1a1008 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 36px 24px 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(245,166,35,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header-inner { max-width: 860px; margin: 0 auto; }
+  .header-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(245,166,35,0.15);
+    border: 1px solid rgba(245,166,35,0.3);
+    border-radius: 20px;
+    padding: 3px 12px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 14px;
+  }
+  .header h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(42px, 8vw, 72px);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    line-height: 0.95;
+    text-transform: uppercase;
+  }
+  .header h1 span { color: var(--accent); }
+  .header-sub {
+    color: var(--muted);
+    margin-top: 12px;
+    font-size: 13.5px;
+    font-weight: 300;
+    max-width: 480px;
+  }
+
+  /* STATS BAR */
+  .stats-bar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+  }
+  .stats-inner {
+    max-width: 860px; margin: 0 auto;
+    display: flex; flex-wrap: wrap;
+    gap: 0;
+  }
+  .stat {
+    padding: 16px 28px 16px 0;
+    margin-right: 28px;
+    border-right: 1px solid var(--border);
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  .stat:last-child { border-right: none; }
+  .stat-val {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 24px; font-weight: 800;
+    color: var(--accent); letter-spacing: -0.01em;
+  }
+  .stat-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); }
+
+  /* TFCC NOTICE */
+  .tfcc-notice {
+    max-width: 860px; margin: 20px auto; padding: 0 24px;
+  }
+  .notice-box {
+    background: rgba(242,92,92,0.08);
+    border: 1px solid rgba(242,92,92,0.25);
+    border-left: 3px solid var(--red);
+    border-radius: 8px;
+    padding: 14px 18px;
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+  .notice-icon { font-size: 18px; margin-top: 1px; flex-shrink: 0; }
+  .notice-text { font-size: 13px; color: #ccc; }
+  .notice-text strong { color: var(--red); font-weight: 500; }
+
+  /* MAIN */
+  .main { max-width: 860px; margin: 0 auto; padding: 0 24px 60px; }
+
+  /* DAY TABS */
+  .day-tabs {
+    display: flex; gap: 6px; flex-wrap: wrap;
+    margin: 24px 0 20px;
+  }
+  .day-tab {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 16px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
+    min-width: 90px;
+  }
+  .day-tab:hover { border-color: var(--accent); background: var(--surface2); }
+  .day-tab.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #000;
+  }
+  .day-tab .tab-day {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px; font-weight: 800;
+    text-transform: uppercase; letter-spacing: 0.02em;
+  }
+  .day-tab .tab-label { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; opacity: 0.7; }
+  .day-tab.active .tab-label { opacity: 0.6; }
+
+  /* DAY PANEL */
+  .day-panel { display: none; }
+  .day-panel.active { display: block; animation: fadeIn 0.25s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  .day-header {
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 10px;
+    margin-bottom: 18px;
+  }
+  .day-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 34px; font-weight: 900;
+    text-transform: uppercase; letter-spacing: -0.01em;
+  }
+  .day-title span { color: var(--accent); }
+  .day-tag {
+    border-radius: 20px; padding: 5px 14px;
+    font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .tag-push { background: rgba(224,92,46,0.15); border: 1px solid rgba(224,92,46,0.3); color: #e05c2e; }
+  .tag-pull { background: rgba(79,156,249,0.15); border: 1px solid rgba(79,156,249,0.3); color: #4f9cf9; }
+  .tag-legs { background: rgba(62,207,142,0.15); border: 1px solid rgba(62,207,142,0.3); color: #3ecf8e; }
+  .tag-cardio { background: rgba(245,166,35,0.15); border: 1px solid rgba(245,166,35,0.3); color: var(--accent); }
+  .tag-full { background: rgba(180,120,255,0.15); border: 1px solid rgba(180,120,255,0.3); color: #c87fff; }
+
+  /* CHUNKS */
+  .chunk {
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+    border: 1px solid var(--border);
+  }
+  .chunk-a { background: var(--chunk-a); border-color: rgba(245,166,35,0.2); }
+  .chunk-b { background: var(--chunk-b); border-color: rgba(79,156,249,0.2); }
+
+  .chunk-header {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 14px;
+  }
+  .chunk-pill {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; padding: 3px 10px; border-radius: 12px;
+  }
+  .chunk-a .chunk-pill { background: rgba(245,166,35,0.2); color: var(--accent); }
+  .chunk-b .chunk-pill { background: rgba(79,156,249,0.2); color: var(--blue); }
+  .chunk-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 20px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+  .chunk-time { margin-left: auto; font-size: 12px; color: var(--muted); }
+
+  /* EXERCISE TABLE */
+  .exercise-table { width: 100%; border-collapse: collapse; }
+  .exercise-table thead tr th {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--muted);
+    text-align: left; padding: 0 8px 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .exercise-table thead tr th:last-child { text-align: right; }
+  .exercise-table tbody tr { border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .exercise-table tbody tr:last-child { border-bottom: none; }
+  .exercise-table tbody tr td {
+    padding: 10px 8px; font-size: 14px; vertical-align: top;
+  }
+  .ex-name { font-weight: 500; display: flex; align-items: flex-start; gap: 8px; }
+  .ex-note {
+    font-size: 11px; color: var(--muted); margin-top: 2px;
+    font-style: italic;
+  }
+  .ex-badge {
+    display: inline-block;
+    font-size: 9px; font-weight: 600; letter-spacing: 0.06em;
+    text-transform: uppercase; padding: 2px 7px; border-radius: 10px;
+    flex-shrink: 0; margin-top: 2px;
+  }
+  .badge-ring { background: rgba(62,207,142,0.15); color: #3ecf8e; }
+  .badge-db { background: rgba(245,166,35,0.12); color: var(--accent); }
+  .badge-band { background: rgba(180,120,255,0.12); color: #c87fff; }
+  .badge-bw { background: rgba(255,255,255,0.08); color: #aaa; }
+  .sets-reps {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 17px; font-weight: 700;
+    color: var(--text); white-space: nowrap; text-align: right;
+  }
+  .sets-sub { font-size: 11px; color: var(--muted); font-family: 'DM Sans', sans-serif; font-weight: 400; }
+
+  /* MOBILITY SECTION */
+  .mobility-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+  }
+  @media (max-width: 480px) { .mobility-grid { grid-template-columns: 1fr; } }
+  .mobility-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    display: flex; gap: 10px; align-items: flex-start;
+  }
+  .mob-icon { font-size: 20px; }
+  .mob-detail h4 { font-size: 14px; font-weight: 500; }
+  .mob-detail p { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  /* CARDIO SECTION */
+  .cardio-block {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 14px 16px;
+    margin-bottom: 10px;
+  }
+  .cardio-block h4 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px; font-weight: 700; text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .cardio-steps { list-style: none; }
+  .cardio-steps li {
+    display: flex; align-items: center; gap: 10px;
+    padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 13.5px;
+  }
+  .cardio-steps li:last-child { border-bottom: none; }
+  .step-num {
+    width: 22px; height: 22px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; flex-shrink: 0;
+    background: rgba(245,166,35,0.2); color: var(--accent);
+  }
+  .step-time { margin-left: auto; color: var(--accent); font-weight: 500; font-size: 13px; }
+
+  /* PROGRESSION BOX */
+  .progression {
+    background: rgba(62,207,142,0.06);
+    border: 1px solid rgba(62,207,142,0.2);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-top: 20px;
+  }
+  .progression h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 20px; font-weight: 800; text-transform: uppercase;
+    color: var(--green); margin-bottom: 12px; letter-spacing: 0.02em;
+  }
+  .progression ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .progression ul li {
+    font-size: 13.5px; display: flex; gap: 10px; align-items: flex-start;
+  }
+  .progression ul li::before {
+    content: '→'; color: var(--green); font-weight: 700; flex-shrink: 0;
+  }
+
+  /* OVERVIEW SECTION */
+  .overview {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  .overview h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 22px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.02em;
+    margin-bottom: 14px;
+  }
+  .week-grid {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px;
+  }
+  @media (max-width: 520px) { .week-grid { grid-template-columns: 1fr 1fr; } }
+  .week-day {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 12px 10px;
+    text-align: center; cursor: pointer; transition: all 0.15s ease;
+  }
+  .week-day:hover { border-color: var(--accent); }
+  .week-day .wd-day {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 22px; font-weight: 800; text-transform: uppercase;
+    color: var(--accent);
+  }
+  .week-day .wd-name { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; margin-top: 4px; }
+  .week-day .wd-chunks { font-size: 11px; color: var(--muted); margin-top: 6px; }
+
+  footer {
+    text-align: center; padding: 20px;
+    font-size: 11.5px; color: var(--muted);
+    border-top: 1px solid var(--border);
+    max-width: 860px; margin: 0 auto;
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <div class="header-badge">⚡ 5-Day Hypertrophy Plan</div>
+    <h1>YOUR<br><span>TRAINING</span><br>PLAN</h1>
+    <p class="header-sub">Built for WFH · TFCC-safe · Dumbbells + Rings + Bands · 15–20 min chunks</p>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat"><span class="stat-val">5</span><span class="stat-label">Days / Week</span></div>
+    <div class="stat"><span class="stat-val">2</span><span class="stat-label">Chunks / Day</span></div>
+    <div class="stat"><span class="stat-val">15–20</span><span class="stat-label">Min / Chunk</span></div>
+    <div class="stat"><span class="stat-val">3–8 kg</span><span class="stat-label">Dumbbells</span></div>
+    <div class="stat"><span class="stat-val">Rings + Bands</span><span class="stat-label">Equipment</span></div>
+  </div>
+</div>
+
+<!-- TFCC NOTICE -->
+<div class="tfcc-notice">
+  <div class="notice-box">
+    <div class="notice-icon">🛡️</div>
+    <div class="notice-text">
+      <strong>TFCC Protocol Active</strong> — All exercises use <strong>neutral or hammer grip</strong> where possible. Avoid wrist extension under load. No hanging, no bar pullups. Ring exercises keep wrists in a natural position. If any wrist discomfort occurs, stop the set immediately.
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- WEEK OVERVIEW -->
+  <div class="overview">
+    <h3>📅 Weekly Structure</h3>
+    <div class="week-grid">
+      <div class="week-day" onclick="switchDay(0)">
+        <div class="wd-day">MON</div>
+        <div class="wd-name">Push</div>
+        <div class="wd-chunks">Chest · Shoulders · Tris</div>
+      </div>
+      <div class="week-day" onclick="switchDay(1)">
+        <div class="wd-day">TUE</div>
+        <div class="wd-name">Pull</div>
+        <div class="wd-chunks">Back · Bis · Rear Delts</div>
+      </div>
+      <div class="week-day" onclick="switchDay(2)">
+        <div class="wd-day">WED</div>
+        <div class="wd-name">Legs + Core</div>
+        <div class="wd-chunks">Quads · Glutes · Abs</div>
+      </div>
+      <div class="week-day" onclick="switchDay(3)">
+        <div class="wd-day">THU</div>
+        <div class="wd-name">Cardio + Mobility</div>
+        <div class="wd-chunks">Shadow Boxing · Stretch</div>
+      </div>
+      <div class="week-day" onclick="switchDay(4)">
+        <div class="wd-day">FRI</div>
+        <div class="wd-name">Full Body + Run</div>
+        <div class="wd-chunks">Circuit · Easy Run</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="day-tabs">
+    <button class="day-tab active" onclick="switchDay(0)"><span class="tab-day">Mon</span><span class="tab-label">Push</span></button>
+    <button class="day-tab" onclick="switchDay(1)"><span class="tab-day">Tue</span><span class="tab-label">Pull</span></button>
+    <button class="day-tab" onclick="switchDay(2)"><span class="tab-day">Wed</span><span class="tab-label">Legs</span></button>
+    <button class="day-tab" onclick="switchDay(3)"><span class="tab-day">Thu</span><span class="tab-label">Cardio</span></button>
+    <button class="day-tab" onclick="switchDay(4)"><span class="tab-day">Fri</span><span class="tab-label">Full Body</span></button>
+  </div>
+
+  <!-- ===================== DAY 1 - PUSH ===================== -->
+  <div class="day-panel active" id="day-0">
+    <div class="day-header">
+      <div class="day-title">Monday — <span>Push Day</span></div>
+      <div class="day-tag tag-push">Chest · Shoulders · Triceps</div>
+    </div>
+
+    <div class="chunk chunk-a">
+      <div class="chunk-header">
+        <span class="chunk-pill">Chunk A</span>
+        <span class="chunk-name">Chest Focus</span>
+        <span class="chunk-time">🌅 Morning · 15–20 min</span>
+      </div>
+      <table class="exercise-table">
+        <thead><tr>
+          <th>Exercise</th><th></th><th style="text-align:right">Sets × Reps</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td><div class="ex-name"><span class="ex-badge badge-ring">Ring</span>Ring Push-ups</div>
+              <div class="ex-note">Rings low to ground, neutral wrist — great TFCC-safe push</div></td>
+            <td></td>
+            <td><div class="sets-reps">3 × 8–12</div><div class="sets-sub">60s rest</div></td>
+          </tr>
+          <tr>
+            <td><div class="ex-name"><span class="ex-badge badge-ring">Ring</span>Ring Chest Flyes</div>
+              <div class="ex-note">Rings at chest height · arms wide · slight bend in elbows · bring hands together slowly · wrists stay neutral throughout</div></td>
+            <td></td>
+            <td><div class="sets-reps">3 × 10–12</div><div class="sets-sub">60s rest</div></td>
+          </tr>
+          <tr>
+            <td><div class="ex-name"><span class="ex-badge badge-band">Band</span>Band Chest Fly</div>
+              <div class="ex-note">Anchor band behind you at chest height · constant tension</div></td>
+            <td></td>
+            <td><div class="sets-reps">3 × 12–15</div><div class="sets-sub">45s rest</div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="chunk chunk-b">
+      <div class="chunk-header">
+        <span class="chunk-pill">Chunk B</span>
+        <span class="chunk-name">Shoulders + Triceps</span>
+        <span class="chunk-time">🌆 Afternoon · 15–20 min</span>
+      </div>
+      <table class="exercise-table">
+        <thead><tr><th>Exercise</th><th></th><th style="text-align:right">Sets × Reps</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><div class="ex-name"><span class="ex-badge badge-db">DB</span>Seated DB Shoulder Press</div>
+              <div class="ex-note">5kg each · sit on floor/chair · press overhead with control</div></td>
+            <td></td>
+            <td><div class="sets-reps">3 × 10–12</div><div class="sets-sub">60s rest</div></td>
+          </tr>
+          <tr>
+            <td><div class="ex-name"><span class="ex-badge badge-db">DB</span>Lateral Raises</div>
+              <div class="ex-note">3kg · slow negative (3 sec down) · don't shrug</div></td>
+            <td></td>
+            <td><div class="sets-reps">3 × 12–15</div><div class="sets-sub">45s rest</div></td>
+          </tr>
+          <tr>
+            <td><div class="ex-name"><span class="ex-badge badge-db">DB</span>Overhead Tricep Extension</div>
+              <div class="ex-note">5kg single · both hands cup the dumbbell · elbow stays still</div></td>
+            <td></td>
+            <td><div class="sets-reps">3 × 12</div><div class="sets-sub">45s rest</div></td>
+          </tr>
+          <tr>
+            <td><div class="ex-name"><span class="ex-badge badge-db">DB</span>Tricep Kickbacks</div>
+              <div class="ex-note">3kg · hinge at hips · extend arm fully · neutral grip</div></td>
+            <td></td>
+            <td><div class="sets-reps">3 × 12–15</div><div class="sets-sub">45s rest</div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===================== DAY 2 - PULL ===================== -->
+  <div class="day-panel" id="day-1">
+    <div class="day-header">
+      <div class="day-title">Tuesday — <span>Pull Day</span></div>
+      <div class="day-tag tag-pull">Back · Biceps · Rear Delts</div>
+    </div>
+
+    <div class="chunk chunk-a">
+      <div class="chunk-header">
+        <span class="chunk-pill">Chunk A</span>
+        <span class="chunk-name">Back Focus</span>
+        <span class="chunk-time">🌅 Morning · 15–20 min</span>
+      </div>
+      <table class="exercise-table">
+        <thead><tr><th>Exercise</th><th></th><th style="text-align:right">Sets × Reps</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><div class="ex-name"><span class="ex-badge badge-ring">Ring</span>Ring Rows</div>
+              <div class="ex-note">Rings at waist height · body at 45° · neutral wrist · squeeze shoulder blades</div></td>
+            <td></td>
+            <td><div class="sets-reps">3 × 8–12</div><div class="sets-sub">60s rest</div></td>
+          </tr>
+          <tr>
+            <td><div class="ex-name"><span class="ex-badge badge-db">DB</span>Single Arm DB Row</div>
+              <div class="ex-note">8kg · support with left hand on knee · pull elbow to hip · neutral grip</div></td>
+            <td></td>
+            <td><div class="sets-reps">3 × 10 each</div><div class="sets-sub">60s rest</div></td>
+          </tr>
+          <tr>
+            <td><div class="ex-name"><span class="ex-badge badge-band">Band</span>Band Pull-Aparts</div>
+              <div class="ex-note">Pronated grip · arms straight · pull band to chest · great for posture</div></td>
+            <td></td>
+            <td><div class="sets-reps">3 × 15</div><div class="sets-sub">30s rest</div></td>
+          </tr>
+          <tr>
+            <td><div class="ex-name"><span class="ex-badge badge-band">Band</span>Band Face Pulls</div>
+              <div class="ex-note">Anchor at face height · pull to ears · elbows high · external rotation</div></td>
+            <td></td>
+            <td><div class="sets-reps">3 × 15</div><div class="sets-sub">30s rest</div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="chunk chunk-b">
+      <div class="chunk-header">
+        <span class="chunk-pill">Chunk B</span>
+        <span class="chunk-name">Biceps + Rear Delts</span>
+        <span class="chunk-time">🌆 Afternoon · 15–20 min</span>
+      </div>
+      <table class="exercise-table">
+        <thead><tr><th>Exercise</th><th></th><th style="text-align:right">Sets × Reps</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><div class="ex-name"><span class="ex-badge badge-db">DB</span>Hammer Curls</div>
+              <div class="ex-note">5kg · neutral grip throughout — easiest on TFCC · go slow on the way down</div></td>
+            <td></td>
+            <td><div class="sets-reps">3 × 12</div><div class="sets-sub">45s rest</div></td>
+          </tr>
+          <tr>
+            <td><div class="ex-name"><span class="ex-badge badge-db">DB</span>Alternating DB Curls</div>
+              <div class="ex-note">5kg · supinate at top only if no wrist discomfort · else keep neutral</div></td>
+            <td></td>
+            <td><div class="sets-reps">3 × 10 each</div><div class="sets-sub">45s rest</div></td>
+          </tr>
+          <tr>
+            <td><div class="ex-name"><span class="ex-badge badge-band">Band</span>Band Rear Delt Fly</div>
+              <div class="ex-note">Anchor at chest height · arms wide · squeeze back of shoulder</div></td>
+            <td></td>
+            <td><div class="sets-reps">3 × 15</div><div class="sets-sub">30s rest</div></td>
+          </tr>
+          <tr>
+            <td><div class="ex-name"><span class="ex-badge badge-band">Band</span>Band Reverse Curls</div>
+              <div class="ex-note">Pronated grip · works brachialis & forearm — wrist stays neutral</div></td>
+            <td></td>
+            <td><div class="sets-reps">2 × 12</div><div class="sets-sub">30s rest</div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===================== DAY 3 - LEGS + CORE ===================== -->
+  <div class="day-panel" id="day-2">
+    <div class="day-header">
+      <div class="day-title">Wednesday — <span>Legs + Core</span></div>
+      <div class="day-tag tag-legs">Quads · Glutes · Hamstrings · Abs</div>
+    </div>
+
+    <div class="chunk chunk-a">
+      <div class="chunk-header">
+        <span class="chunk-pill">Chunk A</span>
+        <span class="chunk-name">Legs</span>
+        <span class="chunk-time">🌅 Morning · 15–20 min</span>
+      </div>
+      <table class="exercise-table">
+        <thead><tr><th>Exercise</th><th></th><th style="text-align:right">Sets × Reps</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><div class="ex-name"><span class="ex-badge badge-db">DB</span>Goblet Squat</div>
+              <div class="ex-note">8kg · cup dumbbell at chest · chest tall · knees over toes</div></td>
+            <td></td>
+            <td><div class="sets-reps">3 × 12</div><div class="sets-sub">60s rest</div></td>
+          </tr>
+          <tr>
+            <td><div class="ex-name"><span class="ex-badge badge-db">DB</span>Romanian Deadlift</div>
+              <div class="ex-note">8kg · neutral spine · hinge from hips · feel hamstring stretch</div></td>
+            <td></td>
+            <td><div class="sets-reps">3 × 10</div><div class="sets-sub">60s rest</div></td>
+          </tr>
+          <tr>
+            <td><div class="ex-name"><span class="ex-badge badge-db">DB</span>Reverse Lunges</div>
+              <div class="ex-note">5kg each hand · step back · knee hovers above floor · easier on knees than forward</div></td>
+            <td></td>
+            <td><div class="sets-reps">3 × 10 each</div><div class="sets-sub">60s rest</div></td>
+          </tr>
+          <tr>
+            <td><div class="ex-name"><span class="ex-badge badge-bw">BW</span>Glute Bridges</div>
+              <div class="ex-note">Lie on back · drive hips up · squeeze glutes at top · 1s hold</div></td>
+            <td></td>
+            <td><div class="sets-reps">3 × 15</div><div class="sets-sub">45s rest</div></td>
+          </tr>
+          <tr>
+            <td><div class="ex-name"><span class="ex-badge badge-bw">BW</span>Calf Raises</div>
+              <div class="ex-note">Stand on edge of step · slow down · use wall for balance only</div></td>
+            <td></td>
+            <td><div class="sets-reps">3 × 20</div><div class="sets-sub">30s rest</div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="chunk chunk-b">
+      <div class="chunk-header">
+        <span class="chunk-pill">Chunk B</span>
+        <span class="chunk-name">Core</span>
+        <span class="chunk-time">🌆 Afternoon · 15 min</span>
+      </div>
+      <table class="exercise-table">
+        <thead><tr><th>Exercise</th><th></th><th style="text-align:right">Sets × Reps</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><div class="ex-name"><span class="ex-badge badge-bw">BW</span>Dead Bug</div>
+              <div class="ex-note">Opposite arm + leg lower slowly · low back stays on floor · brilliant for WFH posture</div></td>
+            <td></td>
+            <td><div class="sets-reps">3 × 8 each</div><div class="sets-sub">45s rest</div></td>
+          </tr>
+          <tr>
+            <td><div class="ex-name"><span class="ex-badge badge-bw">BW</span>Bird Dog</div>
+              <div class="ex-note">On all fours · extend opposite arm/leg · spine neutral · 2s hold at top</div></td>
+            <td></td>
+            <td><div class="sets-reps">3 × 10 each</div><div class="sets-sub">45s rest</div></td>
+          </tr>
+          <tr>
+            <td><div class="ex-name"><span class="ex-badge badge-bw">BW</span>Forearm Plank</div>
+              <div class="ex-note">Elbows under shoulders · don't sag · breathe · no wrist loading</div></td>
+            <td></td>
+            <td><div class="sets-reps">3 × 30–45s</div><div class="sets-sub">60s rest</div></td>
+          </tr>
+          <tr>
+            <td><div class="ex-name"><span class="ex-badge badge-bw">BW</span>Side Plank</div>
+              <div class="ex-note">On forearm · hip up · body straight · don't rotate</div></td>
+            <td></td>
+            <td><div class="sets-reps">2 × 25s each</div><div class="sets-sub">45s rest</div></td>
+          </tr>
+          <tr>
+            <td><div class="ex-name"><span class="ex-badge badge-bw">BW</span>Reverse Crunches</div>
+              <div class="ex-note">Lie flat · bring knees to chest · slow lower back down · no neck strain</div></td>
+            <td></td>
+            <td><div class="sets-reps">3 × 15</div><div class="sets-sub">45s rest</div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===================== DAY 4 - CARDIO + MOBILITY ===================== -->
+  <div class="day-panel" id="day-3">
+    <div class="day-header">
+      <div class="day-title">Thursday — <span>Cardio + Mobility</span></div>
+      <div class="day-tag tag-cardio">Active Recovery Day</div>
+    </div>
+
+    <div class="chunk chunk-a">
+      <div class="chunk-header">
+        <span class="chunk-pill">Chunk A</span>
+        <span class="chunk-name">Shadow Boxing</span>
+        <span class="chunk-time">🌅 Morning · 20 min</span>
+      </div>
+      <div class="cardio-block">
+        <h4>🥊 4-Round Shadow Boxing Session</h4>
+        <ul class="cardio-steps">
+          <li><span class="step-num">1</span>Warm-up: shoulder rolls, hip circles, light jogging in place<span class="step-time">3 min</span></li>
+          <li><span class="step-num">2</span>Round 1: Jab-cross combos, footwork, stay light on feet<span class="step-time">2 min</span></li>
+          <li><span class="step-num">3</span>Rest — walk, shake out arms<span class="step-time">1 min</span></li>
+          <li><span class="step-num">4</span>Round 2: Add hooks + slips. Move around, don't stand still<span class="step-time">2 min</span></li>
+          <li><span class="step-num">5</span>Rest<span class="step-time">1 min</span></li>
+          <li><span class="step-num">6</span>Round 3: Freestyle — throw combos, practice defence, stay bouncy<span class="step-time">2 min</span></li>
+          <li><span class="step-num">7</span>Rest<span class="step-time">1 min</span></li>
+          <li><span class="step-num">8</span>Round 4: Max effort — push pace, mix combos, imagine opponent<span class="step-time">2 min</span></li>
+          <li><span class="step-num">9</span>Cool-down: slow walk, deep breaths<span class="step-time">2 min</span></li>
+        </ul>
+      </div>
+      <p style="font-size:12px;color:var(--muted);margin-top:6px;">💡 Keep fists lightly clenched, don't over-grip. Right wrist should stay neutral on impact — imagine pushing with the palm heel, not snapping the wrist.</p>
+    </div>
+
+    <div class="chunk chunk-b">
+      <div class="chunk-header">
+        <span class="chunk-pill">Chunk B</span>
+        <span class="chunk-name">Full-Body Mobility</span>
+        <span class="chunk-time">🌆 Afternoon · 15 min</span>
+      </div>
+      <div class="mobility-grid">
+        <div class="mobility-item"><div class="mob-icon">🦵</div><div class="mob-detail"><h4>Hip 90/90 Stretch</h4><p>Sit on floor · rotate hips · hold 45s each side × 2</p></div></div>
+        <div class="mobility-item"><div class="mob-icon">🌀</div><div class="mob-detail"><h4>Thoracic Rotation</h4><p>Seated or kneeling · twist upper back · 10 each side</p></div></div>
+        <div class="mobility-item"><div class="mob-icon">🐱</div><div class="mob-detail"><h4>Cat-Cow</h4><p>On all fours · arch + round spine · 10 reps slow</p></div></div>
+        <div class="mobility-item"><div class="mob-icon">🌍</div><div class="mob-detail"><h4>World's Greatest Stretch</h4><p>Lunge + rotate + reach · 5 reps each side</p></div></div>
+        <div class="mobility-item"><div class="mob-icon">💪</div><div class="mob-detail"><h4>Band Shoulder Dislocations</h4><p>Wide grip on band · sweep overhead and behind · 10 reps</p></div></div>
+        <div class="mobility-item"><div class="mob-icon">🦶</div><div class="mob-detail"><h4>Ankle Circles + Calf Stretch</h4><p>10 circles each foot · hold calf stretch 30s each</p></div></div>
+        <div class="mobility-item"><div class="mob-icon">🖐️</div><div class="mob-detail"><h4>Wrist Mobility (gentle)</h4><p>Circles · prayer position · gentle flexion — listen to your body</p></div></div>
+        <div class="mobility-item"><div class="mob-icon">🧘</div><div class="mob-detail"><h4>Child's Pose + Hip Flexor Stretch</h4><p>Hold 45s each · breathe into the stretch</p></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== DAY 5 - FULL BODY ===================== -->
+  <div class="day-panel" id="day-4">
+    <div class="day-header">
+      <div class="day-title">Friday — <span>Full Body + Run</span></div>
+      <div class="day-tag tag-full">Circuit + Cardio</div>
+    </div>
+
+    <div class="chunk chunk-a">
+      <div class="chunk-header">
+        <span class="chunk-pill">Chunk A</span>
+        <span class="chunk-name">Full Body Circuit</span>
+        <span class="chunk-time">🌅 Morning · 20 min</span>
+      </div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:12px;">Complete 3 rounds of the circuit below. Rest 90 seconds between rounds — minimal rest between exercises.</p>
+      <table class="exercise-table">
+        <thead><tr><th>Exercise</th><th></th><th style="text-align:right">Reps</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><div class="ex-name"><span class="ex-badge badge-db">DB</span>Goblet Squat</div><div class="ex-note">8kg</div></td>
+            <td></td>
+            <td><div class="sets-reps">× 10</div></td>
+          </tr>
+          <tr>
+            <td><div class="ex-name"><span class="ex-badge badge-ring">Ring</span>Ring Push-ups</div><div class="ex-note">controlled descent</div></td>
+            <td></td>
+            <td><div class="sets-reps">× 10</div></td>
+          </tr>
+          <tr>
+            <td><div class="ex-name"><span class="ex-badge badge-ring">Ring</span>Ring Rows</div><div class="ex-note">full range, chest to rings</div></td>
+            <td></td>
+            <td><div class="sets-reps">× 10</div></td>
+          </tr>
+          <tr>
+            <td><div class="ex-name"><span class="ex-badge badge-db">DB</span>DB Shoulder Press</div><div class="ex-note">5kg each</div></td>
+            <td></td>
+            <td><div class="sets-reps">× 10</div></td>
+          </tr>
+          <tr>
+            <td><div class="ex-name"><span class="ex-badge badge-bw">BW</span>Glute Bridge</div><div class="ex-note">1s squeeze at top</div></td>
+            <td></td>
+            <td><div class="sets-reps">× 15</div></td>
+          </tr>
+          <tr>
+            <td><div class="ex-name"><span class="ex-badge badge-db">DB</span>Hammer Curls</div><div class="ex-note">5kg</div></td>
+            <td></td>
+            <td><div class="sets-reps">× 12</div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="chunk chunk-b">
+      <div class="chunk-header">
+        <span class="chunk-pill">Chunk B</span>
+        <span class="chunk-name">Easy Run</span>
+        <span class="chunk-time">🌆 Afternoon / Evening · 20 min</span>
+      </div>
+      <div class="cardio-block">
+        <h4>🏃 20-Min Easy Run</h4>
+        <ul class="cardio-steps">
+          <li><span class="step-num">1</span>5-min brisk walk warm-up<span class="step-time">5 min</span></li>
+          <li><span class="step-num">2</span>Easy conversational pace jog — you should be able to speak in sentences<span class="step-time">12 min</span></li>
+          <li><span class="step-num">3</span>Cool-down walk + light quad/calf stretch<span class="step-time">3 min</span></li>
+        </ul>
+      </div>
+      <p style="font-size:12px;color:var(--muted);margin-top:6px;">💡 Not a runner yet? Alternate: 1 min jog / 1 min walk for the full 12 minutes. Build up weekly.</p>
+    </div>
+  </div>
+
+  <!-- PROGRESSION -->
+  <div class="progression">
+    <h3>📈 How to Progress Over Time</h3>
+    <ul>
+      <li>Add 1–2 reps per set each week before increasing weight. Reach the top rep target before upping the load.</li>
+      <li>For ring exercises, adjust body angle to increase or decrease difficulty (more horizontal = harder).</li>
+      <li>Use a notebook or phone note to log sets/reps each session — this is your #1 tool for muscle growth.</li>
+      <li>After 4 weeks, switch up one exercise per muscle group to keep it fresh and prevent adaptation.</li>
+      <li>Shadow boxing: increase rounds from 4 → 5 → 6 over weeks. Add intensity inside rounds progressively.</li>
+      <li>Right wrist: if discomfort returns, immediately switch to band alternatives and take 3–5 days off that movement.</li>
+      <li>Weekend = rest. Optional: a 20-min walk or gentle yoga session is fine, but no structured training.</li>
+    </ul>
+  </div>
+
+</div>
+
+<footer>
+  Designed around your equipment, schedule, and TFCC recovery · Always warm up 3–5 min before each chunk · Listen to your body
+</footer>
+
+<script>
+  function switchDay(idx) {
+    document.querySelectorAll('.day-tab').forEach((t, i) => t.classList.toggle('active', i === idx));
+    document.querySelectorAll('.day-panel').forEach((p, i) => p.classList.toggle('active', i === idx));
+    document.querySelector('.main').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+</script>
+</body>
+</html>
