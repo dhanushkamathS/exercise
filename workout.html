@@ -8,25 +8,12 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
-  --bg:#0c0c0d;
-  --s1:#141415;
-  --s2:#1c1c1e;
-  --s3:#242426;
-  --border:#2c2c2e;
-  --text:#f2f0ec;
-  --muted:#888;
-  --dim:#555;
-  --accent:#f5a623;
-  --accent-dim:rgba(245,166,35,0.15);
-  --green:#30d158;
-  --green-dim:rgba(48,209,88,0.15);
-  --blue:#4f9cf9;
-  --red:#f25c5c;
-  --push:#e05c2e;
-  --pull:#4f9cf9;
-  --legs:#3ecf8e;
-  --cardio:#f5a623;
-  --full:#c87fff;
+  --bg:#0c0c0d;--s1:#141415;--s2:#1c1c1e;--s3:#242426;--border:#2c2c2e;
+  --text:#f2f0ec;--muted:#888;--dim:#555;
+  --accent:#f5a623;--accent-dim:rgba(245,166,35,0.15);
+  --green:#30d158;--green-dim:rgba(48,209,88,0.15);
+  --blue:#4f9cf9;--red:#f25c5c;--yt:#ff0000;
+  --push:#e05c2e;--pull:#4f9cf9;--legs:#3ecf8e;--cardio:#f5a623;--full:#c87fff;
 }
 html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif}
 
@@ -35,7 +22,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 .screen.hidden{transform:translateX(100%);pointer-events:none}
 .screen.out{transform:translateX(-40%);opacity:0;pointer-events:none}
 
-/* HOME SCREEN */
+/* HOME */
 #home{background:var(--bg);overflow-y:auto}
 .home-top{padding:48px 24px 24px;background:linear-gradient(180deg,#111112 0%,var(--bg) 100%)}
 .home-greeting{font-size:13px;color:var(--muted);letter-spacing:.05em;text-transform:uppercase;margin-bottom:6px}
@@ -43,18 +30,17 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 .home-title span{color:var(--accent)}
 .week-label{font-size:12px;color:var(--dim);text-transform:uppercase;letter-spacing:.08em;padding:24px 24px 12px;font-weight:500}
 .day-cards{display:flex;flex-direction:column;gap:10px;padding:0 16px 32px}
-.day-card{background:var(--s2);border:1px solid var(--border);border-radius:16px;padding:18px 20px;display:flex;align-items:center;gap:16px;cursor:pointer;transition:all .15s ease;active:scale(.98)}
+.day-card{background:var(--s2);border:1px solid var(--border);border-radius:16px;padding:18px 20px;display:flex;align-items:center;gap:16px;cursor:pointer;transition:all .15s ease}
 .day-card:active{transform:scale(.97);background:var(--s3)}
-.day-card.rest-day{opacity:.45;cursor:default}
+.day-card.rest-day{opacity:.4;cursor:default}
 .day-dot{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:900;text-transform:uppercase;letter-spacing:.02em}
 .dc-info{flex:1}
 .dc-day{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;font-weight:500;margin-bottom:3px}
 .dc-name{font-size:17px;font-weight:600}
 .dc-sub{font-size:12px;color:var(--muted);margin-top:2px}
 .dc-arrow{color:var(--dim);font-size:18px}
-.dc-chunks{font-size:12px;padding:3px 10px;border-radius:20px;font-weight:500;letter-spacing:.04em}
 
-/* WORKOUT SCREEN */
+/* WORKOUT */
 #workout{background:var(--bg)}
 .nav-bar{padding:16px 20px 12px;display:flex;align-items:center;gap:12px;flex-shrink:0;background:var(--bg);border-bottom:1px solid var(--border);position:relative;z-index:10}
 .back-btn{width:36px;height:36px;border-radius:10px;background:var(--s2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;flex-shrink:0}
@@ -66,10 +52,8 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 .overall-progress-bar{height:100%;background:var(--accent);transition:width .4s ease;border-radius:0 2px 2px 0}
 .workout-body{flex:1;overflow-y:auto;padding:0 0 200px}
 
-/* CHUNK HEADER */
+/* CHUNK */
 .chunk-section{padding:20px 20px 0}
-.chunk-header-pill{display:inline-flex;align-items:center;gap:8px;margin-bottom:14px}
-.chunk-letter{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:12px}
 .chunk-title{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;text-transform:uppercase;letter-spacing:.01em}
 .chunk-time-badge{font-size:11px;color:var(--muted);margin-left:8px}
 
@@ -77,22 +61,36 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 .exercise-card{background:var(--s1);border:1px solid var(--border);border-radius:14px;margin:0 16px 12px;overflow:hidden;transition:border-color .2s}
 .exercise-card.active-ex{border-color:var(--accent)}
 .exercise-card.done-ex{border-color:rgba(48,209,88,.3)}
-.ex-card-header{padding:14px 16px 10px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
-.ex-card-left{}
-.ex-card-badge{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:8px;margin-bottom:6px}
+.ex-card-header{padding:14px 14px 10px;display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.ex-card-left{flex:1;min-width:0}
+.ex-top-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap}
+.ex-card-badge{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:8px;flex-shrink:0}
 .badge-ring{background:rgba(48,209,88,.15);color:#30d158}
 .badge-db{background:rgba(245,166,35,.13);color:var(--accent)}
 .badge-band{background:rgba(180,120,255,.12);color:#c87fff}
 .badge-bw{background:rgba(255,255,255,.07);color:#aaa}
-.ex-card-name{font-size:16px;font-weight:600;line-height:1.2}
+.ex-card-name{font-size:15px;font-weight:600;line-height:1.2}
 .ex-card-note{font-size:12px;color:var(--muted);margin-top:4px;font-style:italic;line-height:1.4}
+
+/* YOUTUBE BUTTON */
+.yt-btn{
+  display:inline-flex;align-items:center;gap:5px;
+  background:rgba(255,0,0,0.1);border:1px solid rgba(255,0,0,0.25);
+  color:#ff4444;font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
+  padding:4px 10px;border-radius:20px;cursor:pointer;text-decoration:none;
+  transition:all .15s ease;white-space:nowrap;flex-shrink:0;margin-top:2px
+}
+.yt-btn:hover{background:rgba(255,0,0,0.2);border-color:rgba(255,0,0,0.4)}
+.yt-btn:active{transform:scale(.95)}
+.yt-icon{width:12px;height:12px;flex-shrink:0}
+
 .ex-done-check{width:28px;height:28px;border-radius:50%;background:var(--green-dim);border:1.5px solid var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0;opacity:0;transition:opacity .3s;font-size:13px}
 .exercise-card.done-ex .ex-done-check{opacity:1}
 
 /* SET DOTS */
-.set-row{padding:10px 16px 14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.set-row{padding:8px 14px 14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .set-info{font-size:12px;color:var(--muted);width:100%;margin-bottom:6px}
-.set-dot{width:42px;height:42px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s ease;position:relative;flex-direction:column}
+.set-dot{width:42px;height:42px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s ease;flex-direction:column}
 .set-dot .set-num{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:900;color:var(--dim);transition:color .2s}
 .set-dot .set-sub{font-size:8px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase;margin-top:-2px}
 .set-dot:hover{border-color:var(--accent);background:var(--accent-dim)}
@@ -104,12 +102,11 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 .set-dot.current .set-sub{color:var(--accent)}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(245,166,35,.3)}50%{box-shadow:0 0 0 6px rgba(245,166,35,0)}}
 
-/* REST TIMER OVERLAY */
+/* REST OVERLAY */
 #rest-overlay{
   position:fixed;inset:0;background:rgba(0,0,0,.88);
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  z-index:100;transition:opacity .25s;backdrop-filter:blur(4px);
-  -webkit-backdrop-filter:blur(4px)
+  z-index:100;transition:opacity .25s;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)
 }
 #rest-overlay.hidden{opacity:0;pointer-events:none}
 .rest-label{font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:16px}
@@ -128,7 +125,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 .rest-add-time{background:transparent;border:none;color:var(--muted);font-size:13px;cursor:pointer;margin-top:14px;font-family:'DM Sans',sans-serif}
 .rest-add-time:hover{color:var(--text)}
 
-/* DONE SCREEN */
+/* DONE */
 #done-screen{background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px}
 .done-icon{font-size:64px;margin-bottom:24px}
 .done-title{font-family:'Barlow Condensed',sans-serif;font-size:56px;font-weight:900;text-transform:uppercase;letter-spacing:-.02em;color:var(--green);margin-bottom:8px}
@@ -137,10 +134,10 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 .done-stat{background:var(--s2);border:1px solid var(--border);border-radius:12px;padding:16px 8px}
 .ds-val{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:var(--accent)}
 .ds-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
-.done-btn{background:var(--accent);color:#000;font-size:16px;font-weight:700;padding:16px 56px;border-radius:40px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:.02em}
+.done-btn{background:var(--accent);color:#000;font-size:16px;font-weight:700;padding:16px 56px;border-radius:40px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif}
 .done-btn:active{opacity:.85}
 
-/* FLOATING BOTTOM BAR */
+/* BOTTOM BAR */
 .bottom-bar{
   position:fixed;bottom:0;left:0;right:0;
   background:linear-gradient(0deg,var(--bg) 70%,transparent 100%);
@@ -152,16 +149,13 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 .bottom-ex-progress{font-size:12px;color:var(--muted);margin-top:2px}
 .bottom-next-btn{background:var(--accent);color:#000;border:none;border-radius:12px;padding:10px 20px;font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;flex-shrink:0}
 .bottom-next-btn:active{opacity:.8}
-.bottom-next-btn:disabled{background:var(--s3);color:var(--dim);cursor:default}
 
-/* CHUNK DIVIDER */
 .chunk-divider{margin:20px 16px 4px;height:1px;background:var(--border);position:relative}
 .chunk-divider span{position:absolute;top:-10px;left:0;background:var(--bg);padding-right:10px;font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.08em}
 </style>
 </head>
 <body>
 
-<!-- HOME SCREEN -->
 <div class="screen" id="home">
   <div class="home-top">
     <div class="home-greeting">Your Training</div>
@@ -171,7 +165,6 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
   <div class="day-cards" id="day-cards"></div>
 </div>
 
-<!-- WORKOUT SCREEN -->
 <div class="screen hidden" id="workout">
   <div class="nav-bar">
     <div class="back-btn" onclick="goHome()">←</div>
@@ -189,12 +182,11 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
         <div class="bottom-ex-name" id="bottom-ex-name">Exercise Name</div>
         <div class="bottom-ex-progress" id="bottom-ex-progress">0 / 3 sets done</div>
       </div>
-      <button class="bottom-next-btn" id="bottom-next-btn" onclick="skipToNextExercise()">Skip →</button>
+      <button class="bottom-next-btn" onclick="skipToNextExercise()">Scroll to next →</button>
     </div>
   </div>
 </div>
 
-<!-- DONE SCREEN -->
 <div class="screen hidden" id="done-screen">
   <div class="done-icon">🏆</div>
   <div class="done-title">Crushed it!</div>
@@ -207,15 +199,13 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
   <button class="done-btn" onclick="goHome()">Back Home</button>
 </div>
 
-<!-- REST TIMER OVERLAY -->
 <div id="rest-overlay" class="hidden">
   <div class="rest-label">Rest Time</div>
   <div class="rest-set-info" id="rest-set-info">Set 1 of 3 done</div>
   <div class="rest-circle-wrap">
     <svg width="200" height="200" viewBox="0 0 200 200">
       <circle class="rest-bg" cx="100" cy="100" r="85"/>
-      <circle class="rest-ring" cx="100" cy="100" r="85" id="rest-ring"
-        stroke-dasharray="534" stroke-dashoffset="0"/>
+      <circle class="rest-ring" cx="100" cy="100" r="85" id="rest-ring" stroke-dasharray="534" stroke-dashoffset="0"/>
     </svg>
     <div class="rest-time-display">
       <div class="rest-seconds" id="rest-seconds">60</div>
@@ -229,153 +219,117 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 </div>
 
 <script>
+const YT = q => `https://www.youtube.com/results?search_query=${encodeURIComponent(q+' tutorial how to')}`;
+
 const WORKOUTS = [
   {
-    day: 'Mon', name: 'Push Day', tag: 'Chest · Shoulders · Triceps', color: 'var(--push)',
-    restBetweenSets: 60, restBetweenEx: 30,
-    chunks: [
-      {
-        letter: 'A', name: 'Chest Focus', time: 'Morning chunk · ~18 min',
-        exercises: [
-          {badge:'Ring', bdg:'badge-ring', name:'Ring Push-ups', note:'Rings low to ground, neutral wrist', sets:3, reps:'8–12'},
-          {badge:'Ring', bdg:'badge-ring', name:'Ring Chest Flyes', note:'Arms wide, slight bend in elbows, wrists neutral throughout', sets:3, reps:'10–12'},
-          {badge:'Band', bdg:'badge-band', name:'Band Chest Fly', note:'Anchor at chest height, constant tension', sets:3, reps:'12–15'},
-        ]
-      },
-      {
-        letter: 'B', name: 'Shoulders + Triceps', time: 'Afternoon chunk · ~18 min',
-        exercises: [
-          {badge:'DB', bdg:'badge-db', name:'Seated DB Shoulder Press', note:'5kg each · press overhead with control', sets:3, reps:'10–12'},
-          {badge:'DB', bdg:'badge-db', name:'Lateral Raises', note:'3kg · slow 3-sec negative · don\'t shrug', sets:3, reps:'12–15'},
-          {badge:'DB', bdg:'badge-db', name:'Overhead Tricep Extension', note:'5kg single · cup the dumbbell · elbow stays still', sets:3, reps:'12'},
-          {badge:'DB', bdg:'badge-db', name:'Tricep Kickbacks', note:'3kg · hinge at hips · extend arm fully · neutral grip', sets:3, reps:'12–15'},
-        ]
-      }
+    day:'Mon',name:'Push Day',tag:'Chest · Shoulders · Triceps',color:'var(--push)',
+    restBetweenSets:60,restBetweenEx:45,
+    chunks:[
+      {letter:'A',name:'Chest Focus',time:'Morning · ~18 min',exercises:[
+        {badge:'Ring',bdg:'badge-ring',name:'Ring Push-ups',note:'Rings low to ground, neutral wrist — great TFCC-safe push',sets:3,reps:'8–12',yt:YT('gymnastic ring push ups')},
+        {badge:'Ring',bdg:'badge-ring',name:'Ring Chest Flyes',note:'Arms wide, slight bend in elbows, wrists neutral throughout',sets:3,reps:'10–12',yt:YT('gymnastic ring chest fly')},
+        {badge:'Band',bdg:'badge-band',name:'Band Chest Fly',note:'Anchor at chest height · constant tension through the range',sets:3,reps:'12–15',yt:YT('resistance band chest fly')},
+      ]},
+      {letter:'B',name:'Shoulders + Triceps',time:'Afternoon · ~18 min',exercises:[
+        {badge:'DB',bdg:'badge-db',name:'Seated DB Shoulder Press',note:'5kg each · sit on floor or chair · press overhead with control',sets:3,reps:'10–12',yt:YT('dumbbell shoulder press seated form')},
+        {badge:'DB',bdg:'badge-db',name:'Lateral Raises',note:'3kg · slow 3-sec negative · don\'t shrug at the top',sets:3,reps:'12–15',yt:YT('dumbbell lateral raise form')},
+        {badge:'DB',bdg:'badge-db',name:'Overhead Tricep Extension',note:'5kg single · cup the dumbbell · elbow stays still',sets:3,reps:'12',yt:YT('overhead dumbbell tricep extension')},
+        {badge:'DB',bdg:'badge-db',name:'Tricep Kickbacks',note:'3kg · hinge at hips · extend arm fully · neutral grip',sets:3,reps:'12–15',yt:YT('dumbbell tricep kickback form')},
+      ]}
     ]
   },
   {
-    day: 'Tue', name: 'Pull Day', tag: 'Back · Biceps · Rear Delts', color: 'var(--pull)',
-    restBetweenSets: 60, restBetweenEx: 30,
-    chunks: [
-      {
-        letter: 'A', name: 'Back Focus', time: 'Morning chunk · ~18 min',
-        exercises: [
-          {badge:'Ring', bdg:'badge-ring', name:'Ring Rows', note:'Rings at waist height, body 45°, squeeze shoulder blades', sets:3, reps:'8–12'},
-          {badge:'DB', bdg:'badge-db', name:'Single Arm DB Row', note:'8kg · pull elbow to hip · neutral grip · TFCC safe', sets:3, reps:'10 each'},
-          {badge:'Band', bdg:'badge-band', name:'Band Pull-Aparts', note:'Pronated grip · arms straight · pull to chest', sets:3, reps:'15'},
-          {badge:'Band', bdg:'badge-band', name:'Band Face Pulls', note:'Anchor at face height · pull to ears · elbows high', sets:3, reps:'15'},
-        ]
-      },
-      {
-        letter: 'B', name: 'Biceps + Rear Delts', time: 'Afternoon chunk · ~18 min',
-        exercises: [
-          {badge:'DB', bdg:'badge-db', name:'Hammer Curls', note:'5kg · neutral grip · easiest on TFCC · slow descent', sets:3, reps:'12'},
-          {badge:'DB', bdg:'badge-db', name:'Alternating DB Curls', note:'5kg · keep neutral if any wrist discomfort', sets:3, reps:'10 each'},
-          {badge:'Band', bdg:'badge-band', name:'Band Rear Delt Fly', note:'Anchor at chest height · squeeze back of shoulder', sets:3, reps:'15'},
-          {badge:'Band', bdg:'badge-band', name:'Band Reverse Curls', note:'Pronated grip · works brachialis · wrist stays neutral', sets:2, reps:'12'},
-        ]
-      }
+    day:'Tue',name:'Pull Day',tag:'Back · Biceps · Rear Delts',color:'var(--pull)',
+    restBetweenSets:60,restBetweenEx:45,
+    chunks:[
+      {letter:'A',name:'Back Focus',time:'Morning · ~18 min',exercises:[
+        {badge:'Ring',bdg:'badge-ring',name:'Ring Rows',note:'Rings at waist height, body 45°, neutral wrist, squeeze shoulder blades',sets:3,reps:'8–12',yt:YT('gymnastic ring rows')},
+        {badge:'DB',bdg:'badge-db',name:'Single Arm DB Row',note:'8kg · support on knee · pull elbow to hip · neutral grip',sets:3,reps:'10 each',yt:YT('single arm dumbbell row form')},
+        {badge:'Band',bdg:'badge-band',name:'Band Pull-Aparts',note:'Pronated grip · arms straight · pull band to chest · great for posture',sets:3,reps:'15',yt:YT('resistance band pull aparts')},
+        {badge:'Band',bdg:'badge-band',name:'Band Face Pulls',note:'Anchor at face height · pull to ears · elbows high · external rotation',sets:3,reps:'15',yt:YT('resistance band face pulls')},
+      ]},
+      {letter:'B',name:'Biceps + Rear Delts',time:'Afternoon · ~18 min',exercises:[
+        {badge:'DB',bdg:'badge-db',name:'Hammer Curls',note:'5kg · neutral grip throughout — easiest on TFCC · slow descent',sets:3,reps:'12',yt:YT('dumbbell hammer curl form')},
+        {badge:'DB',bdg:'badge-db',name:'Alternating DB Curls',note:'5kg · keep neutral grip if any wrist discomfort',sets:3,reps:'10 each',yt:YT('alternating dumbbell bicep curl')},
+        {badge:'Band',bdg:'badge-band',name:'Band Rear Delt Fly',note:'Anchor at chest height · arms wide · squeeze back of shoulder',sets:3,reps:'15',yt:YT('resistance band rear delt fly')},
+        {badge:'Band',bdg:'badge-band',name:'Band Reverse Curls',note:'Pronated grip · works brachialis & forearm · wrist stays neutral',sets:2,reps:'12',yt:YT('resistance band reverse curl')},
+      ]}
     ]
   },
   {
-    day: 'Wed', name: 'Legs + Core', tag: 'Quads · Glutes · Hamstrings · Abs', color: 'var(--legs)',
-    restBetweenSets: 60, restBetweenEx: 30,
-    chunks: [
-      {
-        letter: 'A', name: 'Legs', time: 'Morning chunk · ~20 min',
-        exercises: [
-          {badge:'DB', bdg:'badge-db', name:'Goblet Squat', note:'8kg · chest tall · knees over toes', sets:3, reps:'12'},
-          {badge:'DB', bdg:'badge-db', name:'Romanian Deadlift', note:'8kg · hinge from hips · feel hamstring stretch', sets:3, reps:'10'},
-          {badge:'DB', bdg:'badge-db', name:'Reverse Lunges', note:'5kg each · step back · knee hovers above floor', sets:3, reps:'10 each'},
-          {badge:'BW', bdg:'badge-bw', name:'Glute Bridges', note:'Drive hips up · squeeze glutes at top · 1s hold', sets:3, reps:'15'},
-          {badge:'BW', bdg:'badge-bw', name:'Calf Raises', note:'On edge of step · slow descent · wall for balance', sets:3, reps:'20'},
-        ]
-      },
-      {
-        letter: 'B', name: 'Core', time: 'Afternoon chunk · ~15 min',
-        exercises: [
-          {badge:'BW', bdg:'badge-bw', name:'Dead Bug', note:'Low back stays on floor · opposite arm + leg · slow', sets:3, reps:'8 each'},
-          {badge:'BW', bdg:'badge-bw', name:'Bird Dog', note:'On all fours · extend opposite arm/leg · 2s hold', sets:3, reps:'10 each'},
-          {badge:'BW', bdg:'badge-bw', name:'Forearm Plank', note:'Elbows under shoulders · breathe · no wrist loading', sets:3, reps:'30–45s'},
-          {badge:'BW', bdg:'badge-bw', name:'Side Plank', note:'On forearm · hip up · body straight · don\'t rotate', sets:2, reps:'25s each'},
-          {badge:'BW', bdg:'badge-bw', name:'Reverse Crunches', note:'Bring knees to chest · slow lower · no neck strain', sets:3, reps:'15'},
-        ]
-      }
+    day:'Wed',name:'Legs + Core',tag:'Quads · Glutes · Hamstrings · Abs',color:'var(--legs)',
+    restBetweenSets:60,restBetweenEx:45,
+    chunks:[
+      {letter:'A',name:'Legs',time:'Morning · ~20 min',exercises:[
+        {badge:'DB',bdg:'badge-db',name:'Goblet Squat',note:'8kg · cup at chest · chest tall · knees over toes',sets:3,reps:'12',yt:YT('goblet squat form dumbbell')},
+        {badge:'DB',bdg:'badge-db',name:'Romanian Deadlift',note:'8kg · neutral spine · hinge from hips · feel hamstring stretch',sets:3,reps:'10',yt:YT('dumbbell romanian deadlift form')},
+        {badge:'DB',bdg:'badge-db',name:'Reverse Lunges',note:'5kg each · step back · knee hovers above floor',sets:3,reps:'10 each',yt:YT('reverse lunge dumbbell form')},
+        {badge:'BW',bdg:'badge-bw',name:'Glute Bridges',note:'Drive hips up · squeeze glutes at top · 1s hold',sets:3,reps:'15',yt:YT('glute bridge exercise form')},
+        {badge:'BW',bdg:'badge-bw',name:'Calf Raises',note:'Edge of step · slow descent · use wall for balance only',sets:3,reps:'20',yt:YT('calf raise bodyweight form')},
+      ]},
+      {letter:'B',name:'Core',time:'Afternoon · ~15 min',exercises:[
+        {badge:'BW',bdg:'badge-bw',name:'Dead Bug',note:'Low back stays on floor · opposite arm + leg lower slowly',sets:3,reps:'8 each',yt:YT('dead bug exercise core form')},
+        {badge:'BW',bdg:'badge-bw',name:'Bird Dog',note:'On all fours · extend opposite arm/leg · 2s hold at top',sets:3,reps:'10 each',yt:YT('bird dog exercise form')},
+        {badge:'BW',bdg:'badge-bw',name:'Forearm Plank',note:'Elbows under shoulders · breathe · no wrist loading',sets:3,reps:'30–45s',yt:YT('forearm plank form')},
+        {badge:'BW',bdg:'badge-bw',name:'Side Plank',note:'On forearm · hip up · body straight · don\'t rotate',sets:2,reps:'25s each',yt:YT('side plank form')},
+        {badge:'BW',bdg:'badge-bw',name:'Reverse Crunches',note:'Bring knees to chest · slow lower · no neck strain',sets:3,reps:'15',yt:YT('reverse crunch form')},
+      ]}
     ]
   },
   {
-    day: 'Thu', name: 'Cardio + Mobility', tag: 'Shadow Boxing · Stretch · Active Recovery', color: 'var(--cardio)',
-    restBetweenSets: 60, restBetweenEx: 15,
-    chunks: [
-      {
-        letter: 'A', name: '4-Round Shadow Boxing', time: 'Morning · ~20 min',
-        exercises: [
-          {badge:'BW', bdg:'badge-bw', name:'Warm-up: Shoulder Rolls + Jog in Place', note:'Light warm-up, get blood flowing', sets:1, reps:'3 min'},
-          {badge:'BW', bdg:'badge-bw', name:'Round 1: Jab-Cross Combos', note:'Light footwork · stay bouncy · right fist lightly closed', sets:1, reps:'2 min'},
-          {badge:'BW', bdg:'badge-bw', name:'Round 2: Hooks + Slips', note:'Add hooks · practice head movement · keep moving', sets:1, reps:'2 min'},
-          {badge:'BW', bdg:'badge-bw', name:'Round 3: Freestyle Combos', note:'Mix it up · practice defence · stay bouncy', sets:1, reps:'2 min'},
-          {badge:'BW', bdg:'badge-bw', name:'Round 4: Max Effort', note:'Push the pace · mix combos · imagine opponent', sets:1, reps:'2 min'},
-        ]
-      },
-      {
-        letter: 'B', name: 'Full-Body Mobility', time: 'Afternoon · ~15 min',
-        exercises: [
-          {badge:'BW', bdg:'badge-bw', name:'Hip 90/90 Stretch', note:'Sit on floor · rotate hips · hold 45s each side', sets:2, reps:'45s each'},
-          {badge:'BW', bdg:'badge-bw', name:'Thoracic Rotation', note:'Seated or kneeling · twist upper back · 10 each side', sets:2, reps:'10 each'},
-          {badge:'BW', bdg:'badge-bw', name:'Cat-Cow', note:'On all fours · arch and round spine · slow and controlled', sets:2, reps:'10'},
-          {badge:'BW', bdg:'badge-bw', name:"World's Greatest Stretch", note:'Lunge + rotate + reach · 5 reps each side', sets:2, reps:'5 each'},
-          {badge:'Band', bdg:'badge-band', name:'Band Shoulder Dislocations', note:'Wide grip on band · sweep overhead and behind · slow', sets:2, reps:'10'},
-          {badge:'BW', bdg:'badge-bw', name:'Wrist Mobility (gentle)', note:'Circles · gentle flexion · listen to your TFCC', sets:1, reps:'30s each'},
-        ]
-      }
+    day:'Thu',name:'Cardio + Mobility',tag:'Shadow Boxing · Stretch · Active Recovery',color:'var(--cardio)',
+    restBetweenSets:60,restBetweenEx:15,
+    chunks:[
+      {letter:'A',name:'Shadow Boxing · 4 Rounds',time:'Morning · ~20 min',exercises:[
+        {badge:'BW',bdg:'badge-bw',name:'Warm-up: Shoulder Rolls + Jog in Place',note:'Light warm-up, get blood flowing before rounds',sets:1,reps:'3 min',yt:YT('boxing warm up shoulder rolls')},
+        {badge:'BW',bdg:'badge-bw',name:'Round 1: Jab-Cross Combos',note:'Light footwork · stay bouncy · right fist lightly closed',sets:1,reps:'2 min',yt:YT('shadow boxing jab cross tutorial beginner')},
+        {badge:'BW',bdg:'badge-bw',name:'Round 2: Add Hooks + Slips',note:'Mix hooks in · practice head movement · keep moving',sets:1,reps:'2 min',yt:YT('shadow boxing hook slip beginner')},
+        {badge:'BW',bdg:'badge-bw',name:'Round 3: Freestyle Combos',note:'Mix it up · practice defence · stay bouncy throughout',sets:1,reps:'2 min',yt:YT('shadow boxing combinations beginner')},
+        {badge:'BW',bdg:'badge-bw',name:'Round 4: Max Effort',note:'Push the pace · mix combos · imagine an opponent',sets:1,reps:'2 min',yt:YT('shadow boxing workout cardio')},
+      ]},
+      {letter:'B',name:'Full-Body Mobility',time:'Afternoon · ~15 min',exercises:[
+        {badge:'BW',bdg:'badge-bw',name:'Hip 90/90 Stretch',note:'Sit on floor · rotate hips · hold 45s each side',sets:2,reps:'45s each',yt:YT('hip 90 90 stretch mobility')},
+        {badge:'BW',bdg:'badge-bw',name:'Thoracic Rotation',note:'Seated or kneeling · twist upper back · 10 each side',sets:2,reps:'10 each',yt:YT('thoracic rotation mobility exercise')},
+        {badge:'BW',bdg:'badge-bw',name:'Cat-Cow',note:'On all fours · arch and round spine · slow and controlled',sets:2,reps:'10',yt:YT('cat cow stretch spine mobility')},
+        {badge:'BW',bdg:'badge-bw',name:"World's Greatest Stretch",note:'Lunge + rotate + reach · 5 reps each side',sets:2,reps:'5 each',yt:YT('worlds greatest stretch')},
+        {badge:'Band',bdg:'badge-band',name:'Band Shoulder Dislocations',note:'Wide grip on band · sweep overhead and behind · slow',sets:2,reps:'10',yt:YT('band shoulder dislocations mobility')},
+        {badge:'BW',bdg:'badge-bw',name:'Wrist Mobility — Gentle',note:'Circles · gentle flexion · listen to your TFCC',sets:1,reps:'30s each',yt:YT('wrist mobility exercises TFCC recovery')},
+      ]}
     ]
   },
   {
-    day: 'Fri', name: 'Full Body + Run', tag: 'Circuit · Cardio', color: 'var(--full)',
-    restBetweenSets: 90, restBetweenEx: 20,
-    chunks: [
-      {
-        letter: 'A', name: 'Full Body Circuit (3 rounds)', time: 'Morning · ~20 min',
-        exercises: [
-          {badge:'DB', bdg:'badge-db', name:'Goblet Squat', note:'8kg · 3 rounds circuit, rest 90s between rounds', sets:3, reps:'10'},
-          {badge:'Ring', bdg:'badge-ring', name:'Ring Push-ups', note:'Controlled descent · full range', sets:3, reps:'10'},
-          {badge:'Ring', bdg:'badge-ring', name:'Ring Rows', note:'Chest to rings · squeeze at top', sets:3, reps:'10'},
-          {badge:'DB', bdg:'badge-db', name:'DB Shoulder Press', note:'5kg each · press overhead', sets:3, reps:'10'},
-          {badge:'BW', bdg:'badge-bw', name:'Glute Bridge', note:'1-second squeeze at top', sets:3, reps:'15'},
-          {badge:'DB', bdg:'badge-db', name:'Hammer Curls', note:'5kg · neutral grip · TFCC safe', sets:3, reps:'12'},
-        ]
-      },
-      {
-        letter: 'B', name: 'Easy Run', time: 'Afternoon / Evening · ~20 min',
-        exercises: [
-          {badge:'BW', bdg:'badge-bw', name:'Brisk Walk Warm-up', note:'5 minutes at comfortable pace to loosen up', sets:1, reps:'5 min'},
-          {badge:'BW', bdg:'badge-bw', name:'Easy Conversational Jog', note:'Slow enough to speak in sentences · no sprinting', sets:1, reps:'12 min'},
-          {badge:'BW', bdg:'badge-bw', name:'Cool-down Walk + Stretch', note:'Quad stretch · calf stretch · shake it out', sets:1, reps:'3 min'},
-        ]
-      }
+    day:'Fri',name:'Full Body + Run',tag:'Circuit · Cardio',color:'var(--full)',
+    restBetweenSets:90,restBetweenEx:20,
+    chunks:[
+      {letter:'A',name:'Full Body Circuit (3 rounds)',time:'Morning · ~20 min',exercises:[
+        {badge:'DB',bdg:'badge-db',name:'Goblet Squat',note:'8kg · 3 rounds circuit · rest 90s between rounds',sets:3,reps:'10',yt:YT('goblet squat form dumbbell')},
+        {badge:'Ring',bdg:'badge-ring',name:'Ring Push-ups',note:'Controlled descent · full range of motion',sets:3,reps:'10',yt:YT('gymnastic ring push ups')},
+        {badge:'Ring',bdg:'badge-ring',name:'Ring Rows',note:'Chest to rings · squeeze at top',sets:3,reps:'10',yt:YT('gymnastic ring rows')},
+        {badge:'DB',bdg:'badge-db',name:'DB Shoulder Press',note:'5kg each · press overhead with control',sets:3,reps:'10',yt:YT('dumbbell shoulder press seated form')},
+        {badge:'BW',bdg:'badge-bw',name:'Glute Bridge',note:'1-second squeeze at top of each rep',sets:3,reps:'15',yt:YT('glute bridge exercise form')},
+        {badge:'DB',bdg:'badge-db',name:'Hammer Curls',note:'5kg · neutral grip · TFCC safe',sets:3,reps:'12',yt:YT('dumbbell hammer curl form')},
+      ]},
+      {letter:'B',name:'Easy Run',time:'Afternoon / Evening · ~20 min',exercises:[
+        {badge:'BW',bdg:'badge-bw',name:'Brisk Walk Warm-up',note:'5 minutes at comfortable pace to loosen up',sets:1,reps:'5 min',yt:YT('run walk warm up beginner')},
+        {badge:'BW',bdg:'badge-bw',name:'Easy Conversational Jog',note:'Slow enough to speak in full sentences · no sprinting',sets:1,reps:'12 min',yt:YT('easy conversational pace running beginner')},
+        {badge:'BW',bdg:'badge-bw',name:'Cool-down Walk + Stretch',note:'Quad stretch · calf stretch · shake it out',sets:1,reps:'3 min',yt:YT('running cool down stretch')},
+      ]}
     ]
   }
 ];
 
-let currentWorkout = null;
-let setStatus = {}; // setStatus[exIdx][setIdx] = true/false
-let restTimer = null;
-let restRemaining = 0;
-let restTotal = 0;
-let restNextName = '';
-let workoutStartTime = null;
-let totalSetsCompleted = 0;
+let currentWorkout=null,setStatus={},restTimer=null,restRemaining=0,restTotal=0,workoutStartTime=null,totalSetsCompleted=0;
 
-function renderHome() {
-  const container = document.getElementById('day-cards');
-  const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-  const restDays = [
-    {day:'Sat', name:'Rest Day', sub:'Recovery · Optional walk'},
-    {day:'Sun', name:'Rest Day', sub:'Recovery · Optional yoga'}
-  ];
-  let html = '';
-  WORKOUTS.forEach((w, i) => {
-    html += `<div class="day-card" onclick="startWorkout(${i})">
+function ytIcon(){
+  return `<svg class="yt-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1C24 15.9 24 12 24 12s0-3.9-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>`;
+}
+
+function renderHome(){
+  const c=document.getElementById('day-cards');
+  let h='';
+  WORKOUTS.forEach((w,i)=>{
+    h+=`<div class="day-card" onclick="startWorkout(${i})">
       <div class="day-dot" style="background:${w.color}22;color:${w.color}">${w.day}</div>
       <div class="dc-info">
         <div class="dc-day">${['Monday','Tuesday','Wednesday','Thursday','Friday'][i]}</div>
@@ -385,274 +339,222 @@ function renderHome() {
       <div class="dc-arrow">›</div>
     </div>`;
   });
-  restDays.forEach(r => {
-    html += `<div class="day-card rest-day">
-      <div class="day-dot" style="background:var(--s3);color:var(--dim)">${r.day}</div>
-      <div class="dc-info">
-        <div class="dc-day">${r.day === 'Sat' ? 'Saturday' : 'Sunday'}</div>
-        <div class="dc-name">${r.name}</div>
-        <div class="dc-sub">${r.sub}</div>
-      </div>
+  [['Sat','Rest Day','Recovery · Optional walk'],['Sun','Rest Day','Recovery · Optional yoga']].forEach(([d,n,s])=>{
+    h+=`<div class="day-card rest-day">
+      <div class="day-dot" style="background:var(--s3);color:var(--dim)">${d}</div>
+      <div class="dc-info"><div class="dc-day">${d==='Sat'?'Saturday':'Sunday'}</div><div class="dc-name">${n}</div><div class="dc-sub">${s}</div></div>
     </div>`;
   });
-  container.innerHTML = html;
+  c.innerHTML=h;
 }
 
-function startWorkout(idx) {
-  currentWorkout = WORKOUTS[idx];
-  setStatus = {};
-  totalSetsCompleted = 0;
-  workoutStartTime = Date.now();
-
-  let globalIdx = 0;
-  currentWorkout.chunks.forEach(chunk => {
-    chunk.exercises.forEach(ex => {
-      setStatus[globalIdx] = {};
-      for (let s = 0; s < ex.sets; s++) setStatus[globalIdx][s] = false;
-      globalIdx++;
+function startWorkout(idx){
+  currentWorkout=WORKOUTS[idx];
+  setStatus={};totalSetsCompleted=0;workoutStartTime=Date.now();
+  let g=0;
+  currentWorkout.chunks.forEach(chunk=>{
+    chunk.exercises.forEach(ex=>{
+      setStatus[g]={};
+      for(let s=0;s<ex.sets;s++) setStatus[g][s]=false;
+      g++;
     });
   });
-
-  document.getElementById('nav-title').textContent = currentWorkout.day + ' — ' + currentWorkout.name;
-  document.getElementById('nav-subtitle').textContent = currentWorkout.tag;
+  document.getElementById('nav-title').textContent=currentWorkout.day+' — '+currentWorkout.name;
+  document.getElementById('nav-subtitle').textContent=currentWorkout.tag;
   renderWorkout();
   showScreen('workout');
   updateProgress();
 }
 
-function renderWorkout() {
-  const body = document.getElementById('workout-body');
-  let html = '';
-  let globalIdx = 0;
-
-  currentWorkout.chunks.forEach((chunk, ci) => {
-    const chunkColor = ci === 0 ? 'rgba(245,166,35,.2);color:var(--accent)' : 'rgba(79,156,249,.2);color:var(--blue)';
-    html += `<div class="chunk-section">
+function renderWorkout(){
+  const body=document.getElementById('workout-body');
+  let html='',gi=0;
+  currentWorkout.chunks.forEach((chunk,ci)=>{
+    const cc=ci===0?'rgba(245,166,35,.2);color:var(--accent)':'rgba(79,156,249,.2);color:var(--blue)';
+    html+=`<div class="chunk-section">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
-        <span class="chunk-letter" style="background:${chunkColor}">${chunk.letter}</span>
+        <span style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:12px;background:${cc}">${chunk.letter}</span>
         <span class="chunk-title">${chunk.name}</span>
         <span class="chunk-time-badge">· ${chunk.time}</span>
       </div>`;
-
-    chunk.exercises.forEach((ex, ei) => {
-      const gIdx = globalIdx;
-      const allSets = Object.keys(setStatus[gIdx]);
-      const done = allSets.every(s => setStatus[gIdx][s]);
-      const anyDone = allSets.some(s => setStatus[gIdx][s]);
-      html += `<div class="exercise-card ${done ? 'done-ex' : anyDone ? 'active-ex' : ''}" id="ex-card-${gIdx}">
+    chunk.exercises.forEach((ex,ei)=>{
+      const gIdx=gi;
+      const allSets=Object.keys(setStatus[gIdx]);
+      const done=allSets.every(s=>setStatus[gIdx][s]);
+      const anyDone=allSets.some(s=>setStatus[gIdx][s]);
+      html+=`<div class="exercise-card ${done?'done-ex':anyDone?'active-ex':''}" id="ex-card-${gIdx}">
         <div class="ex-card-header">
           <div class="ex-card-left">
-            <span class="ex-card-badge ${ex.bdg}">${ex.badge}</span>
+            <div class="ex-top-row">
+              <span class="ex-card-badge ${ex.bdg}">${ex.badge}</span>
+              <a href="${ex.yt}" target="_blank" class="yt-btn" onclick="event.stopPropagation()">${ytIcon()} Watch tutorial</a>
+            </div>
             <div class="ex-card-name">${ex.name}</div>
             <div class="ex-card-note">${ex.note}</div>
           </div>
-          <div class="ex-done-check">✓</div>
+          <div class="ex-done-check" style="margin-top:4px">✓</div>
         </div>
         <div class="set-row">
           <div class="set-info">${ex.sets} sets × ${ex.reps}</div>`;
-
-      for (let s = 0; s < ex.sets; s++) {
-        const isDone = setStatus[gIdx][s];
-        const isNext = !isDone && (s === 0 || setStatus[gIdx][s-1]);
-        html += `<div class="set-dot ${isDone ? 'done' : isNext ? 'current' : ''}" id="set-${gIdx}-${s}" onclick="completeSet(${gIdx},${s})">
+      for(let s=0;s<ex.sets;s++){
+        const isDone=setStatus[gIdx][s];
+        const isNext=!isDone&&(s===0||setStatus[gIdx][s-1]);
+        html+=`<div class="set-dot ${isDone?'done':isNext?'current':''}" id="set-${gIdx}-${s}" onclick="completeSet(${gIdx},${s})">
           <span class="set-num">${s+1}</span>
-          <span class="set-sub">${isDone ? 'done' : 'set'}</span>
+          <span class="set-sub">${isDone?'done':'set'}</span>
         </div>`;
       }
-      html += `</div></div>`;
-      globalIdx++;
+      html+=`</div></div>`;
+      gi++;
     });
-
-    html += `</div>`;
-    if (ci < currentWorkout.chunks.length - 1) {
-      html += `<div class="chunk-divider"><span>Chunk B</span></div>`;
-    }
+    html+=`</div>`;
+    if(ci<currentWorkout.chunks.length-1) html+=`<div class="chunk-divider"><span>Chunk B</span></div>`;
   });
-
-  html += `<div style="height:20px"></div>`;
-  body.innerHTML = html;
+  html+=`<div style="height:20px"></div>`;
+  body.innerHTML=html;
   updateBottomBar();
 }
 
-function completeSet(exIdx, setIdx) {
-  if (setStatus[exIdx][setIdx]) return;
-  setStatus[exIdx][setIdx] = true;
+function completeSet(exIdx,setIdx){
+  if(setStatus[exIdx][setIdx]) return;
+  setStatus[exIdx][setIdx]=true;
   totalSetsCompleted++;
-
-  const allDone = checkAllDone();
   updateProgress();
-
-  if (allDone) {
-    setTimeout(() => showDoneScreen(), 400);
-    return;
-  }
-
-  const nextInfo = getNextSetInfo(exIdx, setIdx);
-  const restDuration = nextInfo.sameEx ? currentWorkout.restBetweenSets : currentWorkout.restBetweenEx + currentWorkout.restBetweenSets;
-  showRest(restDuration, `Set ${setIdx+1} of ${Object.keys(setStatus[exIdx]).length} done`, nextInfo.name, exIdx, setIdx);
+  if(checkAllDone()){ setTimeout(()=>showDoneScreen(),400); return; }
+  const nextInfo=getNextSetInfo(exIdx,setIdx);
+  const dur=nextInfo.sameEx?currentWorkout.restBetweenSets:currentWorkout.restBetweenEx+currentWorkout.restBetweenSets;
+  showRest(dur,`Set ${setIdx+1} of ${Object.keys(setStatus[exIdx]).length} done`,nextInfo.name);
   renderExerciseCard(exIdx);
 }
 
-function renderExerciseCard(exIdx) {
-  const card = document.getElementById(`ex-card-${exIdx}`);
-  if (!card) return;
-  const allSets = Object.keys(setStatus[exIdx]);
-  const done = allSets.every(s => setStatus[exIdx][s]);
-  const anyDone = allSets.some(s => setStatus[exIdx][s]);
-  card.className = `exercise-card ${done ? 'done-ex' : anyDone ? 'active-ex' : ''}`;
-
-  for (let s = 0; s < allSets.length; s++) {
-    const dot = document.getElementById(`set-${exIdx}-${s}`);
-    if (!dot) continue;
-    const isDone = setStatus[exIdx][s];
-    const isNext = !isDone && (s === 0 || setStatus[exIdx][s-1]);
-    dot.className = `set-dot ${isDone ? 'done' : isNext ? 'current' : ''}`;
-    dot.querySelector('.set-sub').textContent = isDone ? 'done' : 'set';
+function renderExerciseCard(exIdx){
+  const card=document.getElementById(`ex-card-${exIdx}`);
+  if(!card) return;
+  const allSets=Object.keys(setStatus[exIdx]);
+  const done=allSets.every(s=>setStatus[exIdx][s]);
+  const anyDone=allSets.some(s=>setStatus[exIdx][s]);
+  card.className=`exercise-card ${done?'done-ex':anyDone?'active-ex':''}`;
+  for(let s=0;s<allSets.length;s++){
+    const dot=document.getElementById(`set-${exIdx}-${s}`);
+    if(!dot) continue;
+    const isDone=setStatus[exIdx][s];
+    const isNext=!isDone&&(s===0||setStatus[exIdx][s-1]);
+    dot.className=`set-dot ${isDone?'done':isNext?'current':''}`;
+    dot.querySelector('.set-sub').textContent=isDone?'done':'set';
   }
   updateBottomBar();
 }
 
-function getNextSetInfo(exIdx, setIdx) {
-  const ex = getExByGlobalIdx(exIdx);
-  if (setIdx + 1 < ex.sets) {
-    return {sameEx: true, name: ex.name};
-  }
-  let globalIdx = 0;
-  for (const chunk of currentWorkout.chunks) {
-    for (const e of chunk.exercises) {
-      if (globalIdx === exIdx + 1) return {sameEx: false, name: e.name};
-      globalIdx++;
+function getNextSetInfo(exIdx,setIdx){
+  const ex=getExByGlobalIdx(exIdx);
+  if(setIdx+1<ex.sets) return {sameEx:true,name:ex.name};
+  let g=0;
+  for(const chunk of currentWorkout.chunks){
+    for(const e of chunk.exercises){
+      if(g===exIdx+1) return {sameEx:false,name:e.name};
+      g++;
     }
   }
-  return {sameEx: false, name: 'Next exercise'};
+  return {sameEx:false,name:'Last exercise'};
 }
 
-function getExByGlobalIdx(gIdx) {
-  let idx = 0;
-  for (const chunk of currentWorkout.chunks) {
-    for (const ex of chunk.exercises) {
-      if (idx === gIdx) return ex;
-      idx++;
-    }
+function getExByGlobalIdx(gIdx){
+  let idx=0;
+  for(const chunk of currentWorkout.chunks){
+    for(const ex of chunk.exercises){ if(idx===gIdx) return ex; idx++; }
   }
   return null;
 }
 
-function getTotalExercises() {
-  return currentWorkout.chunks.reduce((a, c) => a + c.exercises.length, 0);
+function getTotalSets(){ return Object.values(setStatus).reduce((a,v)=>a+Object.keys(v).length,0); }
+function getTotalExercises(){ return currentWorkout.chunks.reduce((a,c)=>a+c.exercises.length,0); }
+function checkAllDone(){ return Object.values(setStatus).every(ex=>Object.values(ex).every(v=>v)); }
+
+function updateProgress(){
+  const total=getTotalSets(),done=totalSetsCompleted;
+  document.getElementById('progress-bar').style.width=(total>0?(done/total)*100:0)+'%';
+  document.getElementById('nav-progress-text').textContent=done+'/'+total;
 }
 
-function getTotalSets() {
-  return Object.values(setStatus).reduce((a, v) => a + Object.keys(v).length, 0);
-}
-
-function checkAllDone() {
-  return Object.values(setStatus).every(ex => Object.values(ex).every(v => v));
-}
-
-function updateProgress() {
-  const total = getTotalSets();
-  const done = totalSetsCompleted;
-  const pct = total > 0 ? (done / total) * 100 : 0;
-  document.getElementById('progress-bar').style.width = pct + '%';
-  document.getElementById('nav-progress-text').textContent = done + '/' + total;
-}
-
-function updateBottomBar() {
-  const bar = document.getElementById('bottom-bar');
-  if (!currentWorkout) return;
-  const totalEx = getTotalExercises();
-  let doneEx = 0, currentExIdx = -1, currentExName = '', currentSets = 0, doneSetsInEx = 0;
-  Object.keys(setStatus).forEach(gi => {
-    const sets = setStatus[gi];
-    const allDone = Object.values(sets).every(v => v);
-    if (allDone) doneEx++;
-    else if (currentExIdx === -1) {
-      currentExIdx = parseInt(gi);
-      currentExName = getExByGlobalIdx(currentExIdx)?.name || '';
-      currentSets = Object.keys(sets).length;
-      doneSetsInEx = Object.values(sets).filter(v => v).length;
+function updateBottomBar(){
+  const bar=document.getElementById('bottom-bar');
+  if(!currentWorkout) return;
+  const totalEx=getTotalExercises();
+  let doneEx=0,currentExIdx=-1,currentExName='',currentSets=0,doneSetsInEx=0;
+  Object.keys(setStatus).forEach(gi=>{
+    const sets=setStatus[gi];
+    if(Object.values(sets).every(v=>v)) doneEx++;
+    else if(currentExIdx===-1){
+      currentExIdx=parseInt(gi);
+      currentExName=getExByGlobalIdx(currentExIdx)?.name||'';
+      currentSets=Object.keys(sets).length;
+      doneSetsInEx=Object.values(sets).filter(v=>v).length;
     }
   });
-  if (currentExIdx === -1) { bar.style.display = 'none'; return; }
-  bar.style.display = 'block';
-  document.getElementById('bottom-ex-name').textContent = currentExName;
-  document.getElementById('bottom-ex-progress').textContent = `${doneSetsInEx} / ${currentSets} sets done · Exercise ${doneEx+1} of ${totalEx}`;
+  if(currentExIdx===-1){bar.style.display='none';return;}
+  bar.style.display='block';
+  document.getElementById('bottom-ex-name').textContent=currentExName;
+  document.getElementById('bottom-ex-progress').textContent=`${doneSetsInEx} / ${currentSets} sets done · Exercise ${doneEx+1} of ${totalEx}`;
 }
 
-function skipToNextExercise() {
-  let firstIncomplete = -1;
-  for (const gi in setStatus) {
-    if (!Object.values(setStatus[gi]).every(v => v)) { firstIncomplete = parseInt(gi); break; }
-  }
-  if (firstIncomplete < 0) return;
-  const card = document.getElementById(`ex-card-${firstIncomplete}`);
-  if (card) card.scrollIntoView({behavior:'smooth', block:'center'});
+function skipToNextExercise(){
+  let first=-1;
+  for(const gi in setStatus){ if(!Object.values(setStatus[gi]).every(v=>v)){first=parseInt(gi);break;} }
+  if(first<0) return;
+  const card=document.getElementById(`ex-card-${first}`);
+  if(card) card.scrollIntoView({behavior:'smooth',block:'center'});
 }
 
-/* REST TIMER */
-function showRest(seconds, setInfo, nextName, exIdx, setIdx) {
-  restRemaining = seconds;
-  restTotal = seconds;
-  restNextName = nextName;
-  document.getElementById('rest-set-info').textContent = setInfo;
-  document.getElementById('rest-next-ex').textContent = nextName;
-  document.getElementById('rest-seconds').textContent = seconds;
-  updateRestRing(seconds, seconds);
+function showRest(seconds,setInfo,nextName){
+  restRemaining=seconds;restTotal=seconds;
+  document.getElementById('rest-set-info').textContent=setInfo;
+  document.getElementById('rest-next-ex').textContent=nextName;
+  document.getElementById('rest-seconds').textContent=seconds;
+  updateRestRing(seconds,seconds);
   document.getElementById('rest-overlay').classList.remove('hidden');
   clearInterval(restTimer);
-  restTimer = setInterval(() => {
+  restTimer=setInterval(()=>{
     restRemaining--;
-    document.getElementById('rest-seconds').textContent = restRemaining;
-    updateRestRing(restRemaining, restTotal);
-    if (restRemaining <= 0) { clearInterval(restTimer); dismissRest(); }
-  }, 1000);
+    document.getElementById('rest-seconds').textContent=restRemaining;
+    updateRestRing(restRemaining,restTotal);
+    if(restRemaining<=0){clearInterval(restTimer);dismissRest();}
+  },1000);
 }
 
-function updateRestRing(remaining, total) {
-  const circumference = 534;
-  const offset = circumference - (remaining / total) * circumference;
-  const ring = document.getElementById('rest-ring');
-  if (ring) ring.style.strokeDashoffset = Math.max(0, offset);
-  const sec = document.getElementById('rest-seconds');
-  if (sec) sec.style.color = remaining <= 5 ? 'var(--green)' : 'var(--text)';
+function updateRestRing(r,t){
+  const offset=534-(r/t)*534;
+  const ring=document.getElementById('rest-ring');
+  if(ring) ring.style.strokeDashoffset=Math.max(0,offset);
+  const sec=document.getElementById('rest-seconds');
+  if(sec) sec.style.color=r<=5?'var(--green)':'var(--text)';
 }
 
-function skipRest() { clearInterval(restTimer); dismissRest(); }
-function addRestTime() {
-  restRemaining += 15;
-  restTotal += 15;
-  document.getElementById('rest-seconds').textContent = restRemaining;
-}
-function dismissRest() {
-  document.getElementById('rest-overlay').classList.add('hidden');
-  renderWorkout();
-}
+function skipRest(){clearInterval(restTimer);dismissRest();}
+function addRestTime(){restRemaining+=15;restTotal+=15;document.getElementById('rest-seconds').textContent=restRemaining;}
+function dismissRest(){document.getElementById('rest-overlay').classList.add('hidden');renderWorkout();}
 
-/* SCREENS */
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => {
-    if (s.id === id) { s.classList.remove('hidden','out'); }
-    else if (id === 'done-screen' && s.id === 'workout') { s.classList.add('out'); s.classList.remove('hidden'); }
-    else { s.classList.add('hidden'); s.classList.remove('out'); }
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>{
+    if(s.id===id){s.classList.remove('hidden','out');}
+    else if(id==='done-screen'&&s.id==='workout'){s.classList.add('out');s.classList.remove('hidden');}
+    else{s.classList.add('hidden');s.classList.remove('out');}
   });
 }
 
-function goHome() {
+function goHome(){
   clearInterval(restTimer);
   document.getElementById('rest-overlay').classList.add('hidden');
-  document.getElementById('bottom-bar').style.display = 'none';
+  document.getElementById('bottom-bar').style.display='none';
   showScreen('home');
 }
 
-function showDoneScreen() {
-  const elapsed = Math.round((Date.now() - workoutStartTime) / 60000);
-  const totalEx = getTotalExercises();
-  document.getElementById('ds-sets').textContent = totalSetsCompleted;
-  document.getElementById('ds-exs').textContent = totalEx;
-  document.getElementById('ds-time').textContent = elapsed + 'm';
-  document.getElementById('done-sub').textContent = `${currentWorkout.name} complete. Every set counts.`;
-  document.getElementById('bottom-bar').style.display = 'none';
+function showDoneScreen(){
+  const elapsed=Math.round((Date.now()-workoutStartTime)/60000);
+  document.getElementById('ds-sets').textContent=totalSetsCompleted;
+  document.getElementById('ds-exs').textContent=getTotalExercises();
+  document.getElementById('ds-time').textContent=elapsed+'m';
+  document.getElementById('done-sub').textContent=currentWorkout.name+' complete. Every set counts.';
+  document.getElementById('bottom-bar').style.display='none';
   showScreen('done-screen');
 }
 
